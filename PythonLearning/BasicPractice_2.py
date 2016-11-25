@@ -91,5 +91,96 @@ summer = Chicken()
 print summer.have_feather
 print summer.move(5,8)      #子类继承了父类，也就享有父类的所有属性，如move方法
 
+#面向对象的进一步扩展
+#调用类的其他信息
+#通过self调用类属性
+class Human(object):
+    laugh = "hahahaha"
+    def show_laugh(self):
+        print self.laugh    #通过self.laugh调用了该类属性的值
+    def laugh_10th(self):
+        for i in range(10):
+            self.show_laugh()
+li_lei = Human()
+li_lei.laugh_10th()
+
+#__init__()方法
+#__init__()方法是一个特殊方法（特殊方法的特点就是名字前后有两个下划线）
+#如果在类中定义了__init__()方法，创建对象时，python就会自动调用这个方法，这个过程也被称为初始化
+class happyBird(Bird):
+    def __init__(self, more_words):
+        print "We are happy birds.", more_words
+summer = happyBird("Happy,Happy!")      #尽管只是创建了summer对象，但__init__()方法被自动调用了。先创建了对象，然后执行summer.__init__(more_words), "Happy,Happy!"被传递给了__init__()的参数more_words
+
+#对象的性质
+#有时性质的值随着对象的不同而不同，此时我们通过赋值给self.attribute，给对象增加一些性质，self会传递给各个方法，在方法内部可以通过引用self.attribute查询或修改对象的性质
+class Human(object):
+    def __init__(self, input_gender):
+        self.gender = input_gender  #在初始化中将参数input_gender，赋值给对象的性质self.gender
+    def printGender(self):
+        print self.gender
+li_lei = Human("Male")  #这里"male"作为参数传递给__init__()方法的input_gender变量。gender并不是类属性，是在建立了li_lei这一对象之后，通过初始化赋值给了self.gender
+print li_lei.gender
+li_lei.printGender()    #对象的性质也能被其他方法调用，调用方法跟类属性的调用类似
+
+#内置函数dir()用于查询一个类或者对象所有属性
+print dir(list)
+
+#内置函数help()用来查询说明文档
+#print help(list)
+
+#list是一个类，实验一些list的方法
+nl = [1, 2, 5, 3, 5]        #实际上nl是类list的一个对象
+print nl.count(5)           #计数，看总共有多少个5
+print nl.index(3)           #查询nl第一个3的下标
+nl.append(6); print nl             #在nl的最后添加一个新元素6
+nl.sort(); print nl         #对nl的元素排序
+print nl.pop(), nl          #从nl中去除最后一个元素，并将该元素返回
+nl.remove(2); print nl      #从nl中去除第一个2
+nl.insert(0, 9);print nl   #在下标为0的位置插入9
+
+#运算符是特殊方法
+#比如list的add()方法可以看出是特殊方法，特殊之处在于其定义了对于"+"运算符对于list对象的意义，即两个list的对象相加时，会进行的操作.运算符比如"+"，"-"，"<"，">"及下标引用[start:end]等等，从根本上都是定义在类内部的方法
+print [1, 2, 3] + [5, 6, 9]
+#print [1, 2, 3] - [3, 4]    #会有错误信息，提示运算符"-"没有定义
+# 我们现在继承list类，添加对"-"的定义
+class superList(list):
+    def __sub__(self, b):
+        a = self[:] #self是superList的对象，由于superList继承于list，它可以利用和list[:]相同的引用方法来表示整个对象
+        b = b[:]
+        while len(b) > 0:
+            element_b = b.pop() #从list b的最后一个元素开始取
+            if element_b in a:  # 如果在a中有
+                a.remove(element_b) #就在a中删除
+        return a
+print superList([1, 2, 3]) - superList([3, 4])
+#如果某方法在父类中定义，又在子类中定义了，那么子类对象会参考子类的定义，而不会载入父类的定义，任何其他属性也是这样（Java中的重载）
+#定义运算符对于复杂的对象非常有用。举例来说，人有多个属性，比如姓名，年龄，身高等，可以把对人类的比较(<,>,=)定义成只看年龄，这样就可以根据自己的目的，讲原本不存在的运算符增加在对象上了
+
+#作业1
+
+#闰年判断
+
+def leapYear(year, month, day):
+    if type(year) or type(month) or type(day) == type(1):
+        if month > 12 or month < 0:
+            return "Wrong Month"
+        if day > 31 or day < 1:
+            return "Wrong day"
+        if year % 4 == 0:
+            return True
+        else: return False
+    else: return "Wrong Date Format"
+
+print leapYear(1999,2,27)
+print leapYear(2000,3,4)
+print leapYear(2000,3,43)
+print leapYear(2000,13,2)
+print leapYear(2000,13,43)
+
+
+
+
+
 
 
